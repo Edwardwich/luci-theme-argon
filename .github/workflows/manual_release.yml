@@ -53,7 +53,9 @@ jobs:
         continue-on-error: true  # In case latest_version is not set
 
       - name: Debug version before release
-        run: echo "Version for release: ${{ steps.ensure_version.outputs.latest_version }}"
+        run: |
+          echo "Version for release: ${{ steps.ensure_version.outputs.latest_version }}"
+        # Debug step to check if output is available
 
       - name: Generate new tag & release
         if: steps.check_version.outputs.has_update == 'true'
