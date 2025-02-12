@@ -28,7 +28,6 @@ on:
 env:
   TZ: Asia/Shanghai
 
-
 jobs:
   job_check:
     if: github.repository == ${{ github.repository }}
@@ -58,6 +57,13 @@ jobs:
           echo "latest_release: ${latest_release}"
           echo "has_update: ${has_update}"
 
+      - name: Ensure latest version exists
+        id: ensure_version
+        run: |
+          if [ -z "${{ steps.check_version.outputs.latest_version }}" ]; then
+            echo "latest_version=v1.0.${{ github.run_number }}" >> $GITHUB_OUTPUT
+          fi
+
       - name: Generate new tag & release
         if: steps.check_version.outputs.has_update == 'true'
         uses: softprops/action-gh-release@v1
@@ -65,8 +71,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           name: For openwrt official Snapshots LuCI master
-          tag_name: ${{steps.check_version.outputs.latest_version}}
-
+          tag_name: ${{steps.ensure_version.outputs.latest_version}}
 
   job_build_argon:
     name: Build Argon (master)
