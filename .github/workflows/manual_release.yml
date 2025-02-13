@@ -52,9 +52,18 @@ jobs:
           fi
         continue-on-error: true  # In case latest_version is not set
 
-      - name: Debug version before upload
+      - name: Debug version before release
         run: |
-          echo "Version for Artifacts: ${{ steps.ensure_version.outputs.latest_version }}"
+          echo "Version for release: ${{ steps.ensure_version.outputs.latest_version }}"
+
+      - name: Generate new tag & release
+        if: steps.check_version.outputs.has_update == 'true'
+        uses: softprops/action-gh-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          name: For openwrt official Snapshots LuCI master
+          tag_name: ${{ steps.ensure_version.outputs.latest_version }}
 
   job_build_argon:
     name: Build Argon (master)
@@ -120,6 +129,7 @@ jobs:
           echo "status=success" >> $GITHUB_OUTPUT
           echo "FIRMWARE=$PWD" >> $GITHUB_ENV
 
+      
       - name: Upload Argon (master) ipks as Artifacts
         uses: actions/upload-artifact@v2
         if: steps.compile.outputs.status == 'success'
