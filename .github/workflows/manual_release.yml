@@ -44,18 +44,6 @@ jobs:
           echo "latest_release: ${latest_release}"
           echo "has_update: ${has_update}"
 
-      - name: Ensure latest version exists
-        id: ensure_version
-        run: |
-          if [ -z "${{ steps.check_version.outputs.latest_version }}" ]; then
-            echo "latest_version=v1.0.${{ github.run_number }}" >> $GITHUB_OUTPUT
-          fi
-        continue-on-error: true  # In case latest_version is not set
-
-      - name: Debug version before upload
-        run: |
-          echo "Version for Artifacts: ${{ steps.ensure_version.outputs.latest_version }}"
-
   job_build_argon:
     name: Build Argon (master)
     needs: job_check
@@ -119,6 +107,10 @@ jobs:
           cd ..
           echo "status=success" >> $GITHUB_OUTPUT
           echo "FIRMWARE=$PWD" >> $GITHUB_ENV
+
+      - name: List directory after compilation (debug)
+        run: |
+          ls -R ${{ env.FIRMWARE }}/bin/packages/
 
       - name: Upload All Output Files as Artifacts
         uses: actions/upload-artifact@v4
