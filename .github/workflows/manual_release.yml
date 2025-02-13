@@ -125,4 +125,4 @@ jobs:
         if: steps.compile.outputs.status == 'success'
         with:
           name: luci-theme-argon-output
-          path: ${{ env.FIRMWARE }}/base/*
+          path: ${{ env.FIRMWARE }}/bin/packages/x86_64/base/*.ipk
