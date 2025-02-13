@@ -113,7 +113,7 @@ jobs:
           ls -R ${{ env.FIRMWARE }}/bin/packages/
 
       - name:  Upload Argon (master) ipks to Artifacts
-        uses: actions/upload-artifact@v4
+        uses: softprops/upload-artifact@v4
         if: steps.compile.outputs.status == 'success'
         with:
           name: luci-theme-argon-output
