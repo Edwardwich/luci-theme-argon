@@ -112,9 +112,9 @@ jobs:
         run: |
           ls -R ${{ env.FIRMWARE }}/bin/packages/
 
-      - name: Upload All Output Files as Artifacts
+      - name:  Upload Argon (master) ipks to Artifacts
         uses: actions/upload-artifact@v4
         if: steps.compile.outputs.status == 'success'
         with:
           name: luci-theme-argon-output
-          path: ${{ env.FIRMWARE }}/bin
+          path: ${{ env.FIRMWARE }}/base/luci-theme*.*
