@@ -120,9 +120,9 @@ jobs:
           echo "status=success" >> $GITHUB_OUTPUT
           echo "FIRMWARE=$PWD" >> $GITHUB_ENV
 
-      - name: Upload Argon (master) ipks as Artifacts
+      - name: Upload Argon .ipk files as Artifacts
         uses: actions/upload-artifact@v4
         if: steps.compile.outputs.status == 'success'
         with:
           name: luci-theme-argon-ipks
-          path: ${{ env.FIRMWARE }}/base/luci-theme*.*
+          path: ${{ env.FIRMWARE }}/base/*.ipk
